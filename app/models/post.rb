@@ -3,6 +3,7 @@ class Post
   include Mongoid::Timestamps
 
   field :body, type: String
+  field :tags, type: String
   field :title, type: String
   field :archived, type: Boolean, default: false
 
@@ -10,4 +11,7 @@ class Post
 
   belongs_to :user
 
+  def tags_array
+  	"#{tags}".split(',')
+  end
 end
