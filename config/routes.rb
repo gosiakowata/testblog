@@ -6,4 +6,5 @@ Easyblog::Application.routes.draw do
   devise_for :users
   resources :users
   resources :posts
+  match "mark_archived/:id" => "posts#mark_archived", :via => :post
 end

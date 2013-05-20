@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_filter :authenticate_user!
-  expose_decorated(:posts)
+  skip_before_filter :display_flash_notice, only: :index
+  expose_decorated(:posts) { Post.where(archived: false) }
   expose_decorated(:post)
 
   def index
@@ -21,14 +22,21 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    post.destroy
-    render action: :index
+    if post.user == current_user
+      post.destroy
+      render action: :index
+    else
+      render action: :index
+    end
   end
 
   def show
   end
 
   def mark_archived
+    post.archived = true
+    post.save
+    redirect_to action: :index
   end
 
   def create
